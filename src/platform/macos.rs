@@ -174,14 +174,6 @@ fn kern_procargs2(pid: u32) -> Option<Vec<u8>> {
     }
 }
 
-/// Fallback: read `pbi_comm` from `proc_pidinfo(PROC_PIDTBSDINFO)`.
-///
-/// This is the kernel-level short command name (like `node`, `zsh`).
-/// It does NOT reflect `process.title` changes.
-fn process_comm_name(pid: u32) -> Option<String> {
-    process_bsdinfo(pid).and_then(|info| comm_from_bsdinfo(&info))
-}
-
 fn process_bsdinfo(pid: u32) -> Option<libc::proc_bsdinfo> {
     let mut info: libc::proc_bsdinfo = unsafe { std::mem::zeroed() };
     let size = std::mem::size_of::<libc::proc_bsdinfo>() as libc::c_int;
